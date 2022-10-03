@@ -147,6 +147,7 @@ def recommend_portfolio(intent_request):
                     "The minimum investment amount is $5,000 USD."
                     "Please enter a valid investment amount",
                 )
+
         return build_validation_result(True, None, None)
     
     if source == "DialogCodeHook": 
@@ -168,32 +169,64 @@ def recommend_portfolio(intent_request):
         
         return delegate(output_session_attributes, get_slots(intent_request))
         
+    if risk_level is not None:
+        #risk_level = risk_level
         
-    def get_recommendation():
+        if risk_level == "None" or "none":
+            return close(
+                intent_request["sessionAttributes"],
+                "Fulfilled",
+                {"contentType": "PlainText", "content": "Your recommended investment portfolio is 100% bonds (AGG), 0% equities (SPY)."}
+            )
+        
+        elif risk_level == "Low" or "low":
+            return close(
+                intent_request["sessionAttributes"],
+                "Fulfilled",
+                {"contentType": "PlainText", "content": "Your recommended investment portfolio is 60% bonds (AGG), 40% equities (SPY)."}
+            )
+        
+        elif risk_level == "Medium" or "medium" or "MEDIUM":
+            return close(
+                intent_request["sessionAttributes"],
+                "Fulfilled",
+                {"contentType": "PlainText", "content": "Your recommended investment portfolio is 40% bonds (AGG), 60% equities (SPY)."}
+            )
+        
+        elif risk_level == "High" or "high" or "HIGH":
+            return close(
+                intent_request["sessionAttributes"],
+                "Fulfilled",
+                {"contentType": "PlainText", "content": "Your recommended investment portfolio is 20% bonds (AGG), 80% equities (SPY)."}
+            )        
+        
+#    def get_recommendation():
         """
         Returns an investment recommendation based on the level of risk tolerance of the investor.
         """
-        recommendation = ""
-        if risk_level == "None" or "none" or "NONE" or "0":
+        #recommendation = ""
+"""        if risk_level == "None" or "none":
             recommendation = "100% bonds (AGG), 0% equities (SPY)."
-        elif risk_level == "Low" or "low" or "LOW" or "l":
+        elif risk_level == "Low" or "low":
             recommendation = "60% bonds (AGG), 40% equities (SPY)."
         elif risk_level == "Medium" or "medium" or "MEDIUM":
             recommendation = "40% bonds (AGG), 60% equities (SPY)."
         elif risk_level == "High" or "high" or "HIGH":
             recommendation = "20% bonds (AGG), 80% equities (SPY)."
-        return recommendation
+        else:
+            recommendation = "Please enter none, low, medium, or high."
+        return recommendation """
     
 #close(session_attributes, fulfillment_state, message)
-    if risk_level is not None: 
-        return close(
-            intent_request["sessionAttributes"],
-            "Fulfilled",
-            {"contentType": "PlainText", "content": "Your recommended investment portfolio is {}"
-            .format(get_recommendation()
-            ),
-        }
-    )
+#    if risk_level is not None: 
+#        return close(
+#            intent_request["sessionAttributes"],
+#            "Fulfilled",
+#            {"contentType": "PlainText", "content": """Your recommended investment portfolio is {}"""
+#            .format(recommendation
+#            ),
+#        }
+#    )
 
 
 ### Intents Dispatcher ###
